@@ -1,0 +1,6 @@
+GET http://localhost:8080/fci/api/empresas
+###
+GET http://localhost:8080/fci/api/vagas
+###
+
+GET http://localhost:8080/fci/api/estudantes

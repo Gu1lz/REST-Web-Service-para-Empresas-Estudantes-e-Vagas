@@ -6,18 +6,22 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Estudante {
+    @Id
     private long id;
     private String nome;
     private String email;
     private LocalDate nascimento;
     private int anoIngresso;
 
-    // Construtor sem ID (útil para persistência de dados)
     public Estudante(String nome, String email, LocalDate nascimento, int anoIngresso) {
         this.nome = nome;
         this.email = email;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class EstudanteController {
+    @Autowired
+    public EstudanteRepo estudanteRepo;
+
     private List<Estudante> estudantes = new ArrayList<>();
 
     public EstudanteController() {
@@ -29,32 +33,16 @@ public class EstudanteController {
 
     @GetMapping("/fci/api/estudantes")
     public Iterable<Estudante> getEstudantes() {
-        return estudantes;
+        return estudanteRepo.findAll();
     }
 
     @GetMapping("/fci/api/estudantes/{id}")
     public Estudante getEstudante(@PathVariable long id) {
-        Estudante resposta = null;
-        for (Estudante e : estudantes) {
-            if (e.getId() == id) {
-                resposta = e;
-                break;
-            }
-        }
-        return resposta;
+        return estudanteRepo.findById(id).get();
     }
 
     @PostMapping("/fci/api/estudantes")
     public Estudante createEstudante(@RequestBody Estudante novoEstudante) {
-        long maiorId = 0; // Começando do 0 para lógica de incremento
-        for (Estudante e : estudantes) {
-            if (e.getId() > maiorId) {
-                maiorId = e.getId();
-            }        
-        }
-        long novoId = maiorId + 1;
-        novoEstudante.setId(novoId);
-        estudantes.add(novoEstudante);
-        return novoEstudante;
+        return estudanteRepo.save(novoEstudante);
     }
 }

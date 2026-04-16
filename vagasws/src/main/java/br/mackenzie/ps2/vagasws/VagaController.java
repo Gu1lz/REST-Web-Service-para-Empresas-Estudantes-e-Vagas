@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class VagaController {
+    @Autowired
+    public VagaRepo vagaRepo;
     private List<Vaga> vagas = new ArrayList<>();
 
     public VagaController() {
@@ -26,32 +29,16 @@ public class VagaController {
 
     @GetMapping("/fci/api/vagas")
     public Iterable<Vaga> getVagas() {
-        return vagas;
+        return vagaRepo.findAll();
     }
 
     @GetMapping("/fci/api/vagas/{id}")
     public Vaga getVaga(@PathVariable long id) {
-        Vaga resposta = null;
-        for (Vaga v : vagas) {
-            if (v.getId() == id) {
-                resposta = v;
-                break;
-            }
-        }
-        return resposta;
+        return vagaRepo.findById(id).get();
     }
 
     @PostMapping("/fci/api/vagas")
     public Vaga createVaga(@RequestBody Vaga novaVaga) {
-        long maiorId = 0;
-        for (Vaga v : vagas) {
-            if (v.getId() > maiorId) {
-                maiorId = v.getId();
-            }        
-        }
-        long novoId = maiorId + 1;
-        novaVaga.setId(novoId);
-        vagas.add(novaVaga);
-        return novaVaga;
+        return vagaRepo.save(novaVaga);
     }
 }
